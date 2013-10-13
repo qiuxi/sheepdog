@@ -129,7 +129,9 @@ struct sd_req {
 			uint8_t		copy_policy;
 			uint8_t		reserved[2];
 			uint32_t	tgt_epoch;
-			uint64_t	offset;
+			uint32_t	offset;
+			uint8_t		ec_index;
+			uint8_t		__pad[3];
 		} obj;
 		struct {
 			uint64_t	vdi_size;
