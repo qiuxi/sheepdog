@@ -257,6 +257,8 @@ static int add_event(enum local_event_type type, struct local_node *lnode,
 		.sender = *lnode,
 	};
 
+	buf_len = buf_len > SD_MAX_EVENT_BUF_SIZE ?
+		SD_MAX_EVENT_BUF_SIZE : buf_len;
 	ev.buf_len = buf_len;
 	if (buf)
 		memcpy(ev.buf, buf, buf_len);
