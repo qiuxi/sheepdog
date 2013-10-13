@@ -311,6 +311,15 @@ static int set_erasure_index(const char *path, uint8_t idx)
 	return 0;
 }
 
+static int get_erasure_index(const char *path, uint8_t *idx)
+{
+	if (getxattr(path, ECNAME, idx, ECSIZE) < 0) {
+		sd_err("failed to getxattr %s, %m", path);
+		return -1;
+	}
+	return 0;
+}
+
 int default_create_and_write(uint64_t oid, const struct siocb *iocb)
 {
 	char path[PATH_MAX], tmp_path[PATH_MAX];
@@ -411,7 +420,7 @@ out:
 
 static bool oid_stale(uint64_t oid)
 {
-	int i, nr_copies;
+	uint32_t i, nr_copies;
 	struct vnode_info *vinfo;
 	const struct sd_vnode *v;
 	bool ret = true;
@@ -424,7 +433,18 @@ static bool oid_stale(uint64_t oid)
 	for (i = 0; i < nr_copies; i++) {
 		v = obj_vnodes[i];
 		if (vnode_is_local(v)) {
-			ret = false;
+			if (is_erasure_oid(oid)) {
+				char path[PATH_MAX];
+				uint8_t idx;
+
+				get_obj_path(oid, path, sizeof(path));
+				if (get_erasure_index(path, &idx) < 0)
+					break;
+				if (idx == i)
+					ret = false;
+			} else {
+				ret = false;
+			}
 			break;
 		}
 	}
