@@ -54,6 +54,8 @@ static inline void sd_init_req(struct sd_req *req, uint8_t opcode)
 	memset(req, 0, sizeof(*req));
 	req->opcode = opcode;
 	req->proto_ver = opcode < 0x80 ? SD_PROTO_VER : SD_SHEEP_PROTO_VER;
+	if (opcode == SD_OP_CREATE_AND_WRITE_OBJ || opcode == SD_OP_WRITE_OBJ)
+		req->flags = SD_FLAG_CMD_WRITE;
 }
 
 static inline int same_zone(const struct sd_vnode *v1,

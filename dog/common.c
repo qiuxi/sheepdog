@@ -100,7 +100,6 @@ int sd_write_object(uint64_t oid, uint64_t cow_oid, void *data,
 		sd_init_req(&hdr, SD_OP_WRITE_OBJ);
 
 	hdr.data_length = datalen;
-	hdr.flags = flags | SD_FLAG_CMD_WRITE;
 	if (cow_oid)
 		hdr.flags |= SD_FLAG_CMD_COW;
 	if (direct)

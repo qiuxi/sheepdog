@@ -431,9 +431,7 @@ static int write_cache_object(struct object_cache_entry *entry, void *buf,
 		sd_init_req(&hdr, SD_OP_CREATE_AND_WRITE_OBJ);
 	else
 		sd_init_req(&hdr, SD_OP_WRITE_OBJ);
-	hdr.flags =  SD_FLAG_CMD_WRITE;
 	hdr.data_length = count;
-
 	hdr.obj.oid = oid;
 	hdr.obj.offset = offset;
 
@@ -481,7 +479,6 @@ static int push_cache_object(uint32_t vid, uint32_t idx, uint64_t bmap,
 		sd_init_req(&hdr, SD_OP_CREATE_AND_WRITE_OBJ);
 	else
 		sd_init_req(&hdr, SD_OP_WRITE_OBJ);
-	hdr.flags = SD_FLAG_CMD_WRITE;
 	hdr.data_length = data_length;
 	hdr.obj.oid = oid;
 	hdr.obj.offset = offset;

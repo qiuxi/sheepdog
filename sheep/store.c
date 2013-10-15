@@ -370,12 +370,9 @@ forward_write:
 		sd_init_req(&hdr, SD_OP_CREATE_AND_WRITE_OBJ);
 	else
 		sd_init_req(&hdr, SD_OP_WRITE_OBJ);
-	hdr.flags = SD_FLAG_CMD_WRITE;
 	hdr.data_length = datalen;
-
 	hdr.obj.oid = oid;
 	hdr.obj.offset = offset;
-
 	ret = exec_local_req(&hdr, data);
 	if (ret != SD_RES_SUCCESS)
 		sd_err("failed to write object %" PRIx64 ", %s", oid,
